@@ -12,17 +12,17 @@ namespace OMDMovie.Controllers
     public class MovieController : ControllerBase
     {
         private readonly string apikey = "d43831a1";
-        private  readonly List<string> SearchHistory = new List<string>();
+       
         private readonly HttpClient _httpClient;
 
         public MovieController(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            SearchHistory = new List<string>();
+           
         }
 
         [HttpGet]
-        //[Route("SearchByTitle")]
+        [Route("SearchByTitle")]
 
         public async Task<IActionResult> SearchMovies([FromQuery]string title)
         {
@@ -31,23 +31,10 @@ namespace OMDMovie.Controllers
             {
                 return NotFound();
             }
-            SaveSearchQueryToHistory(title);
+           
             return Ok(MovieInformation);
         }
 
-        [HttpGet]
-        [Route("Searchedhistory")]
-        public IActionResult GetSearchHistory()
-        {
-            return Ok(SearchHistory);
-        }
-
-        public void SaveSearchQueryToHistory(string title)
-        {
-            SearchHistory.Insert(0, title);
-            if (SearchHistory.Count > 5)
-                SearchHistory.RemoveAt(5);
-        }
 
         private async Task<MovieInformation> GetMovieInfomationFromApi(string title)
         {
